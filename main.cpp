@@ -1,57 +1,13 @@
 #include <iostream>
 
 #include <string>
-#include <vector>
 
-#include "StringUtils.h"
-#include "FileReader.h"
-#include "VectorUtils.h"
+#include "modules/StringUtils.h"
+#include "modules/FileReader.h"
+#include "modules/StepReaderConfig.h"
+#include "modules/SectionStepExtractor.h"
 
 using namespace std;
-
-const struct StepReaderConfig {
-    string END_SECTION_KEYWORD;
-    string HEADER_KEYWORD;
-    string DATA_KEYWORD;
-    string STRING_DIVIDER;
-};
-
-class StepReader {
-public:
-    StepReader(StepReaderConfig config, string content): config(config) {
-      sections = stringUtils.split(content, config.END_SECTION_KEYWORD);
-    };
-
-    string getSectionContent(string keyword) {
-      string section = getSectionByKeyword(keyword);
-
-      return stringUtils.split(section, wrapKeyword(keyword))[1];
-    }
-
-private:
-    vector<string> sections;
-    StepReaderConfig config;
-
-    StringUtils stringUtils = StringUtils();
-
-    string getSectionByKeyword(string keyword) {
-      return sections[getSectionIndexByKeyword(keyword)];
-    }
-
-    int getSectionIndexByKeyword(string keyword) {
-      for (int i = 0; i < sections.size(); i++) {
-        string section = sections[i];
-
-        if (section.find(keyword) != string::npos) {
-          return i;
-        }
-      }
-    }
-
-    string wrapKeyword(string keyword) {
-      return keyword + config.STRING_DIVIDER;
-    }
-};
 
 int main() {
   string filePath = "C:\\vz\\pet\\step-parser\\files\\MBA_N.STP";
@@ -65,10 +21,12 @@ int main() {
   FileReader fileReader = FileReader(filePath);
   string textContent = fileReader.readAsText();
 
-  StepReader stepReader = StepReader(stepReaderConfig, textContent);
+  SectionStepExtractor sectionReader = SectionStepExtractor(stepReaderConfig, textContent);
 
-  string header = stepReader.getSectionContent(stepReaderConfig.HEADER_KEYWORD);
-  string data = stepReader.getSectionContent(stepReaderConfig.DATA_KEYWORD);
+  string header = sectionReader.extractSectionContent(stepReaderConfig.HEADER_KEYWORD);
+  string data = sectionReader.extractSectionContent(stepReaderConfig.DATA_KEYWORD);
+
+  cout << header << endl;
 
 //  for (int i = 0; i < array.size(); i++) {
 //    vector<string> expression = stringUtils.split(array[i], "#");

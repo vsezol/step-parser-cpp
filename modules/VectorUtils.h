@@ -14,4 +14,4 @@ public:
 };
 
 
-#endif //STEP_PARSER_VECTORUTILS_H
+#endif STEP_PARSER_VECTORUTILS_H
