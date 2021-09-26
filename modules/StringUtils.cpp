@@ -17,3 +17,32 @@ vector<string> StringUtils::split(string str, string delimiter) {
 
   return result;
 }
+
+string StringUtils::removeEnds(string str) {
+  str = removeFirstElement(str);
+  str = removeLastElement(str);
+  return str;
+}
+
+string StringUtils::removeLastElement(string str) {
+  str.erase(str.length() - 1);
+  return str;
+}
+
+
+string StringUtils::removeFirstElement(string str) {
+  str.erase(0, 1);
+  return str;
+}
+
+string StringUtils::trimByChar(string str, char chr) {
+  if (str[0] == chr) {
+    str = removeFirstElement(str);
+  }
+
+  if (str[str.length() - 1] == chr) {
+    str = removeLastElement(str);
+  }
+
+  return str;
+}

@@ -9,6 +9,14 @@ using namespace std;
 class StringUtils {
 public:
     vector<string> split (string str, string delimiter);
+
+    string removeFirstElement(string str);
+
+    string removeLastElement(string str);
+
+    string removeEnds(string str);
+
+    string trimByChar(string str, char chr);
 };
 
 
