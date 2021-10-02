@@ -3,8 +3,8 @@
 
 #include <string>
 #include <vector>
-#include "StepReaderConfig.h"
-#include "StringUtils.h"
+#include "../structures/StepReaderConfig.h"
+#include "../utils/StringUtils.h"
 
 class SectionStepExtractor {
 public:

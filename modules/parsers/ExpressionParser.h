@@ -4,12 +4,13 @@
 #include <string>
 #include <vector>
 
-#include "StepReaderConfig.h"
-#include "Expression.h"
-#include "StringUtils.h"
+#include "../structures/StepReaderConfig.h"
+#include "../structures/Expression.h"
+#include "../utils/StringUtils.h"
 
 struct CutExpressionResult {
     vector<string> expressions;
+    vector<vector<int>> expressionsScopes;
     string content;
 };
 
@@ -18,11 +19,11 @@ public:
     ExpressionParser(string stringExpression, StepReaderConfig readerConfig);
     void parse();
 
-    Expression getExpression();
+    Expression getRootExpression();
 
 private:
     string stringExpression;
-    Expression expression;
+    Expression rootExpression;
 
     StringUtils stringUtils;
     StepReaderConfig readerConfig;
@@ -32,6 +33,8 @@ private:
     bool checkIsExpression(string expression);
 
     bool checkIsLink(string expression);
+
+    bool checkIsArray(string expression);
 
     vector<string> processArguments(string content);
 

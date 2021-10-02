@@ -14,6 +14,7 @@ const struct StepReaderConfig {
     char CLOSE_SCOPE_SYMBOL;
     char ARGUMENTS_DIVIDER_SYMBOL;
     char LINK_BEGIN_SYMBOL;
+    char EXPRESSION_DIVIDER_SYMBOL;
 };
 
 #endif STEP_PARSER_STEPREADERCONFIG_H

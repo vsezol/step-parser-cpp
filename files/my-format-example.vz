@@ -1,0 +1,12 @@
+example-object
+    . example-property = "example-string-value"
+    . example-array
+        = "example-array-value-1"
+        = "example-array-value-2"
+    . example-nested-object
+        . example-property = 2222.89
+        . example-array
+            = 1
+            = 2
+            = 3
+            = 4
