@@ -9,16 +9,10 @@ FileReader::FileReader(string fileName) {
 }
 
 string FileReader::readAsText() {
-  string text;
+  ifstream inputStream(fileName);
 
-  ifstream inputStream(this->fileName);
-  if (inputStream.is_open()) {
-    string line;
-    while (getline(inputStream, line)) {
-      text += line;
-    }
-  }
-  inputStream.close();
+  string text = string((istreambuf_iterator<char>(inputStream)),
+                       (istreambuf_iterator<char>()));
 
   return text;
 }

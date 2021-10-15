@@ -36,6 +36,10 @@ string StringUtils::removeFirstElement(string str) {
 }
 
 string StringUtils::trimByChar(string str, char chr) {
+  if (str.length() <= 0) {
+    return str;
+  }
+
   if (str[0] == chr) {
     str = removeFirstElement(str);
   }
@@ -45,4 +49,11 @@ string StringUtils::trimByChar(string str, char chr) {
   }
 
   return str;
+}
+
+string StringUtils::charToString(char chr) {
+  string newString = "";
+  newString += chr;
+
+  return newString;
 }

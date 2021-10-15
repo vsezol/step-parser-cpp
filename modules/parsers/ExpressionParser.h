@@ -7,44 +7,17 @@
 #include "../structures/StepReaderConfig.h"
 #include "../structures/Expression.h"
 #include "../utils/StringUtils.h"
+#include "AbstractParser.h"
 
-struct CutExpressionResult {
-    vector<string> expressions;
-    vector<vector<int>> expressionsScopes;
-    string content;
-};
-
-class ExpressionParser {
+class ExpressionParser: public AbstractParser<string, Expression>{
 public:
-    ExpressionParser(string stringExpression, StepReaderConfig readerConfig);
-    void parse();
+    ExpressionParser();
 
-    Expression getRootExpression();
+    virtual Expression parse(string inputData) = 0;
 
-private:
-    string stringExpression;
-    Expression rootExpression;
-
+protected:
     StringUtils stringUtils;
-    StepReaderConfig readerConfig;
-
-    int getExpressionNameEndIndex(string expression);
-
-    bool checkIsExpression(string expression);
-
-    bool checkIsLink(string expression);
-
-    bool checkIsArray(string expression);
-
-    vector<string> processArguments(string content);
-
-    CutExpressionResult cutExpressions(string content);
-
-    bool checkExpressionExistsByScope(vector<int> scope);
-
-    vector<int> findFullScopeByCallScope(string content, vector<int> scope);
-
-    vector<int> findCallScopeRange(string content);
 };
+
 
 #endif STEP_PARSER_EXPRESSIONPARSER_H

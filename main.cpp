@@ -6,13 +6,37 @@
 #include "modules/readers/FileReader.h"
 #include "modules/structures/StepReaderConfig.h"
 #include "modules/extractors/SectionStepExtractor.h"
+#include "modules/extractors/ObjectArgumentsExtractor.h"
 #include "modules/structures/Expression.h"
-#include "modules/parsers/ExpressionParser.h"
+#include "modules/parsers/SimpleExpressionParser.h"
+#include "modules/parsers/ObjectExpressionParser.h"
+#include "modules/parsers/EqualityParser.h"
+#include "modules/checkers/IsSimpleExpressionChecker.h"
+#include "modules/checkers/IsObjectExpressionChecker.h"
+#include "modules/converters/ExpressionToVzConverter.h"
 
 using namespace std;
 
-//string EXAMPLE_EXPRESSION = "PLANE_ANGLE_MEASURE_WITH_UNIT(PLANE_ANGLE_MEASURE(0.0174532925, PLANE_ANGLE_MEASURE('JOPA')),#30,$,*,0.,6,'Maximum Tolerance applied to model',SI_UNIT(.MILLI.,.METRE.))";
-string EXAMPLE_EXPRESSION = "CC_DESIGN_PERSON_AND_ORGANIZATION_ASSIGNMENT(#4605,#4606,(#4600),(''),(#4572,#4570))";
+string EXAMPLE_EQUALITY = "(\n"
+                          "BOUNDED_SURFACE()\n"
+                          "B_SPLINE_SURFACE(2,1,((#969,#970),(#971,#972),(#973,#974)),.UNSPECIFIED.,\n"
+                          ".F.,.F.,.F.)\n"
+                          "B_SPLINE_SURFACE_WITH_KNOTS((3,3),(2,2),(0.,1.),(0.,1.),.UNSPECIFIED.)\n"
+                          "GEOMETRIC_REPRESENTATION_ITEM()\n"
+                          "RATIONAL_B_SPLINE_SURFACE(((0.400039406982928,0.400039406982928),(0.599960593017072,\n"
+                          "0.599960593017072),(0.400039406982928,0.400039406982928)))\n"
+                          "REPRESENTATION_ITEM('')\n"
+                          "SURFACE()\n"
+                          ")";
+
+
+vector<string> getEqualities(string data, char STRING_DIVIDER) {
+  StringUtils stringUtils = StringUtils();
+  vector<string> equalities = stringUtils.split(data, stringUtils.charToString(STRING_DIVIDER));
+  equalities.pop_back();
+
+  return equalities;
+}
 
 int main() {
   string filePath = "C:\\vz\\pet\\step-parser\\files\\MBA_N.STP";
@@ -20,11 +44,12 @@ int main() {
           "ENDSEC",
           "HEADER",
           "DATA",
-          ";",
+          ';',
           '(',
           ')',
           ',',
           '#',
+          '=',
           '\n'
   };
 
@@ -36,27 +61,44 @@ int main() {
   string header = sectionReader.extractSectionContent(stepReaderConfig.HEADER_KEYWORD);
   string data = sectionReader.extractSectionContent(stepReaderConfig.DATA_KEYWORD);
 
-  ExpressionParser expressionParser = ExpressionParser(EXAMPLE_EXPRESSION, stepReaderConfig);
-  expressionParser.parse();
+  vector<string> equalities = getEqualities(data, stepReaderConfig.STRING_DIVIDER);
 
-  Expression expression = expressionParser.getRootExpression();
+  IsObjectExpressionChecker isObjectExpressionChecker = IsObjectExpressionChecker(stepReaderConfig);
+  IsSimpleExpressionChecker isSimpleExpressionChecker = IsSimpleExpressionChecker(stepReaderConfig);
 
+  Expression mainExpression;
+  mainExpression.name = "MAIN_EXPRESSION";
 
+  for (int i = 0; i < equalities.size(); i++) {
+    string equality = equalities[i];
 
-//  ExpressionPrinter(4).print(expressionParser.getRootExpression());
+    EqualityParser equalityParser = EqualityParser(stepReaderConfig);
+    vector<string> parts = equalityParser.parse(equality);
 
-//  for (int i = 0; i < array.size(); i++) {
-//    vector<string> rootExpression = stringUtils.split(array[i], "#");
-//
-//    rootExpression = removeEmptyStrings(rootExpression);
-//    printArrayOfStrings(rootExpression);
-//
-//    //    rootExpression.erase(rootExpression.begin());
-//    //    rootExpression = stringUtils.split(rootExpression[1], "=");
-//  }
+    int equalityNumber = stoi(parts[0]);
+    string equalityBody = parts[1];
+
+    Expression expression;
+    expression.number = equalityNumber;
+
+    if (isObjectExpressionChecker.check(equalityBody)) {
+      ObjectExpressionParser objectExpressionParser = ObjectExpressionParser(
+              new SimpleExpressionParser(stepReaderConfig),
+              new ObjectArgumentsExtractor(stepReaderConfig)
+      );
+      expression = objectExpressionParser.parse(equalityBody);
+    } else if (isSimpleExpressionChecker.check(equalityBody)) {
+      SimpleExpressionParser simpleExpressionParser = SimpleExpressionParser(stepReaderConfig);
+      simpleExpressionParser.parse(equalityBody);
+      expression = simpleExpressionParser.parse(equalityBody);
+    }
+
+    mainExpression.expressions.push_back(expression);
+  }
+
+  cout << ExpressionToVzConverter(mainExpression, vzConfig).convert() << endl;
 
   cout << "End of program" << endl;
 
   return 0;
 }
-

@@ -17,6 +17,8 @@ public:
     string removeEnds(string str);
 
     string trimByChar(string str, char chr);
+
+    string charToString(char chr);
 };
 
 
