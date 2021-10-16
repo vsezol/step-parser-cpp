@@ -1,34 +1,20 @@
-#include <iostream>
-
 #include <string>
 
 #include "modules/utils/StringUtils.h"
-#include "modules/readers/FileReader.h"
+#include "modules/system/FileWorker.h"
 #include "modules/structures/StepReaderConfig.h"
 #include "modules/extractors/SectionStepExtractor.h"
-#include "modules/extractors/ObjectArgumentsExtractor.h"
+#include "modules/extractors/ObjectExpressionArgumentsExtractor.h"
 #include "modules/structures/Expression.h"
 #include "modules/parsers/SimpleExpressionParser.h"
 #include "modules/parsers/ObjectExpressionParser.h"
 #include "modules/parsers/EqualityParser.h"
 #include "modules/checkers/IsSimpleExpressionChecker.h"
 #include "modules/checkers/IsObjectExpressionChecker.h"
-#include "modules/converters/ExpressionToVzConverter.h"
+#include "modules/converters/ExpressionToJsonConverter.h"
+#include "modules/extractors/SimpleExpressionArgumentsExtractor.h"
 
 using namespace std;
-
-string EXAMPLE_EQUALITY = "(\n"
-                          "BOUNDED_SURFACE()\n"
-                          "B_SPLINE_SURFACE(2,1,((#969,#970),(#971,#972),(#973,#974)),.UNSPECIFIED.,\n"
-                          ".F.,.F.,.F.)\n"
-                          "B_SPLINE_SURFACE_WITH_KNOTS((3,3),(2,2),(0.,1.),(0.,1.),.UNSPECIFIED.)\n"
-                          "GEOMETRIC_REPRESENTATION_ITEM()\n"
-                          "RATIONAL_B_SPLINE_SURFACE(((0.400039406982928,0.400039406982928),(0.599960593017072,\n"
-                          "0.599960593017072),(0.400039406982928,0.400039406982928)))\n"
-                          "REPRESENTATION_ITEM('')\n"
-                          "SURFACE()\n"
-                          ")";
-
 
 vector<string> getEqualities(string data, char STRING_DIVIDER) {
   StringUtils stringUtils = StringUtils();
@@ -53,8 +39,7 @@ int main() {
           '\n'
   };
 
-  FileReader fileReader = FileReader(filePath);
-  string textContent = fileReader.readAsText();
+  string textContent = FileWorker(filePath).read();
 
   SectionStepExtractor sectionReader = SectionStepExtractor(stepReaderConfig, textContent);
 
@@ -79,26 +64,34 @@ int main() {
     string equalityBody = parts[1];
 
     Expression expression;
-    expression.number = equalityNumber;
 
     if (isObjectExpressionChecker.check(equalityBody)) {
       ObjectExpressionParser objectExpressionParser = ObjectExpressionParser(
-              new SimpleExpressionParser(stepReaderConfig),
-              new ObjectArgumentsExtractor(stepReaderConfig)
+              new SimpleExpressionParser(stepReaderConfig,
+                                         new SimpleExpressionArgumentsExtractor(
+                                                 stepReaderConfig)),
+              new ObjectExpressionArgumentsExtractor(stepReaderConfig)
       );
       expression = objectExpressionParser.parse(equalityBody);
-    } else if (isSimpleExpressionChecker.check(equalityBody)) {
-      SimpleExpressionParser simpleExpressionParser = SimpleExpressionParser(stepReaderConfig);
+    } else {
+      SimpleExpressionParser simpleExpressionParser = SimpleExpressionParser(
+              stepReaderConfig,
+              new SimpleExpressionArgumentsExtractor(
+                      stepReaderConfig)
+      );
       simpleExpressionParser.parse(equalityBody);
       expression = simpleExpressionParser.parse(equalityBody);
     }
 
+    expression.number = equalityNumber;
+
     mainExpression.expressions.push_back(expression);
   }
 
-  cout << ExpressionToVzConverter(mainExpression, vzConfig).convert() << endl;
+  string serializedExpression = ExpressionToJsonConverter().convert(mainExpression);
 
-  cout << "End of program" << endl;
+  string outputPath = "C:\\vz\\pet\\step-parser\\files\\output\\output.json";
+  FileWorker(outputPath).write(serializedExpression);
 
   return 0;
 }

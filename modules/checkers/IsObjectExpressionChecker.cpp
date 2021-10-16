@@ -4,5 +4,5 @@ IsObjectExpressionChecker::IsObjectExpressionChecker(StepReaderConfig stepReader
         ExpressionChecker(stepReaderConfig) {}
 
 bool IsObjectExpressionChecker::check(string content) {
-  return true;
+  return content[0] == stepReaderConfig.OPEN_SCOPE_SYMBOL;
 }

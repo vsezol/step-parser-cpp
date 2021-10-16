@@ -1,11 +1,10 @@
-#include "ObjectArgumentsExtractor.h"
-#include <iostream>
+#include "ObjectExpressionArgumentsExtractor.h"
 
 using namespace std;
 
-ObjectArgumentsExtractor::ObjectArgumentsExtractor(StepReaderConfig stepReaderConfig): AbstractArgumentsExtractor(stepReaderConfig) {}
+ObjectExpressionArgumentsExtractor::ObjectExpressionArgumentsExtractor(StepReaderConfig stepReaderConfig): AbstractArgumentsExtractor(stepReaderConfig) {}
 
-vector<string> ObjectArgumentsExtractor::extract(string content) {
+vector<string> ObjectExpressionArgumentsExtractor::extract(string content) {
   vector<string> arguments;
 
   if (content.length() < 0) {
@@ -19,6 +18,7 @@ vector<string> ObjectArgumentsExtractor::extract(string content) {
 
   for (int i = 0; i < arguments.size(); i++) {
     arguments[i] = arguments[i] + stringUtils.charToString(stepReaderConfig.CLOSE_SCOPE_SYMBOL);
+    arguments[i] = stringUtils.trimByChar(arguments[i], stepReaderConfig.EXPRESSION_OBJECT_DIVIDER_SYMBOL);
   }
 
   return arguments;

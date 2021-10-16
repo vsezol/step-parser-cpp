@@ -5,8 +5,3 @@ AbstractArgumentsExtractor::AbstractArgumentsExtractor(StepReaderConfig stepRead
   stringUtils = StringUtils();
   vectorUtils = VectorUtils();
 }
-
-vector<string> AbstractArgumentsExtractor::extract(string content) {
-  vector<string> voidVector;
-  return voidVector;
-}

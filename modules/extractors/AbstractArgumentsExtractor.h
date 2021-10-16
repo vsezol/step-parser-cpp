@@ -13,7 +13,7 @@ class AbstractArgumentsExtractor {
 public:
     AbstractArgumentsExtractor(StepReaderConfig stepReaderConfig);
 
-    virtual vector<string> extract(string content);
+    virtual vector<string> extract(string content) = 0;
 
 protected:
     StepReaderConfig stepReaderConfig;

@@ -3,14 +3,13 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 class VectorUtils {
 public:
     vector<string> removeEmptyStrings(vector<string> arr);
-
-    void printStrings(vector<string> arr);
 };
 
 

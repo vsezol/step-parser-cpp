@@ -1,0 +1,12 @@
+#ifndef STEP_PARSER_CONVERTERCONFIG_H
+#define STEP_PARSER_CONVERTERCONFIG_H
+
+struct ConverterConfig {
+    char EQUAL_SYMBOL;
+    char NESTING_SYMBOL;
+    char STRING_QUOTE_SYMBOL;
+    char SPACE_SYMBOL;
+    int TAB_SIZE;
+};
+
+#endif STEP_PARSER_CONVERTERCONFIG_H
