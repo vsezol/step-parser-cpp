@@ -2,5 +2,5 @@ cmake-build-debug
 .idea
 .vs
 files
-libs
+dependencies
 out
