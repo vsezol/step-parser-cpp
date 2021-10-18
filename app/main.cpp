@@ -1,9 +1,11 @@
 #include <string>
+#include <iostream>
 
 #include "modules/system/FileWorker.h"
 #include "modules/utils/StringUtils.h"
 #include "modules/structures/StepReaderConfig.h"
 #include "modules/structures/Expression.h"
+#include "modules/structures/ExecutionConfig.h"
 #include "modules/parsers/SimpleExpressionParser.h"
 #include "modules/parsers/ObjectExpressionParser.h"
 #include "modules/parsers/EqualityPartsParser.h"
@@ -19,11 +21,34 @@
 
 using namespace std;
 
-int main() {
-  string inputFilePath = "C:\\vz\\pet\\step-parser\\files\\MBA_N.STP";
-  string outputFilePath = "C:\\vz\\pet\\step-parser\\files\\output\\output.json";
+int main(int argumentsCount, char **arguments) {
+  ExecutionConfig executionConfig = {
+          "C:\\vz\\pet\\step-parser\\files\\MBA_N.STP",
+          "C:\\vz\\pet\\step-parser\\files\\output\\output.json",
+          true,
+          false,
+  };
 
-  string textContent = FileWorker(inputFilePath).read();
+  vector<string> executionArguments;
+  for (int i = 0; i < argumentsCount; i++) {
+    executionArguments.push_back(string(arguments[i]));
+  }
+
+  for (int i = 0; i < argumentsCount; i++) {
+    string arg = executionArguments[i];
+    string nextArg = "";
+    if (i < argumentsCount - 1) {
+      nextArg = executionArguments[i + 1];
+    }
+
+    if (arg == "--input") {
+      executionConfig.inputPath = nextArg;
+    } else if (arg == "--output") {
+      executionConfig.outputPath = nextArg;
+    }
+  }
+
+  string textContent = FileWorker(executionConfig.inputPath).read();
 
   SectionStepExtractor sectionReader = SectionStepExtractor(stepReaderConfig, textContent);
   string header = sectionReader.extractSectionContent(stepReaderConfig.HEADER_KEYWORD);
@@ -58,7 +83,7 @@ int main() {
 
   string serializedExpression = ExpressionToJsonConverter().convert(mainExpression);
 
-  FileWorker(outputFilePath).write(serializedExpression);
+  FileWorker(executionConfig.outputPath).write(serializedExpression);
 
   return 0;
 }
