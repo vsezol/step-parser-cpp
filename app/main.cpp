@@ -21,34 +21,38 @@
 
 using namespace std;
 
+void updateExecutionConfigByExecutionArguments(ExecutionConfig *executionConfig, vector<string> executionArguments) {
+  for (int i = 0; i < executionArguments.size(); i++) {
+    string arg = executionArguments[i];
+    string nextArg = "";
+    if (i < executionArguments.size() - 1) {
+      nextArg = executionArguments[i + 1];
+    }
+
+    if (arg == "--input") {
+      executionConfig->inputPath = nextArg;
+    } else if (arg == "--output") {
+      executionConfig->outputPath = nextArg;
+    }
+  }
+}
+
 int main(int argumentsCount, char **arguments) {
-  ExecutionConfig executionConfig = {
+  ExecutionConfig *executionConfig = new ExecutionConfig({
           "C:\\vz\\pet\\step-parser\\files\\MBA_N.STP",
           "C:\\vz\\pet\\step-parser\\files\\output\\output.json",
           true,
           false,
-  };
+  });
 
   vector<string> executionArguments;
   for (int i = 0; i < argumentsCount; i++) {
     executionArguments.push_back(string(arguments[i]));
   }
 
-  for (int i = 0; i < argumentsCount; i++) {
-    string arg = executionArguments[i];
-    string nextArg = "";
-    if (i < argumentsCount - 1) {
-      nextArg = executionArguments[i + 1];
-    }
+  updateExecutionConfigByExecutionArguments(executionConfig, executionArguments);
 
-    if (arg == "--input") {
-      executionConfig.inputPath = nextArg;
-    } else if (arg == "--output") {
-      executionConfig.outputPath = nextArg;
-    }
-  }
-
-  string textContent = FileWorker(executionConfig.inputPath).read();
+  string textContent = FileWorker(executionConfig->inputPath).read();
 
   SectionStepExtractor sectionReader = SectionStepExtractor(stepReaderConfig, textContent);
   string header = sectionReader.extractSectionContent(stepReaderConfig.HEADER_KEYWORD);
@@ -83,7 +87,9 @@ int main(int argumentsCount, char **arguments) {
 
   string serializedExpression = ExpressionToJsonConverter().convert(mainExpression);
 
-  FileWorker(executionConfig.outputPath).write(serializedExpression);
+  FileWorker(executionConfig->outputPath).write(serializedExpression);
+
+  delete executionConfig;
 
   return 0;
 }
