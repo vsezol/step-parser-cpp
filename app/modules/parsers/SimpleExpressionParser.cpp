@@ -26,7 +26,7 @@ Expression SimpleExpressionParser::parse(string inputData) {
     } else if (checkIsLink(element)) {
       rootExpression.links.push_back(element);
     } else if (checkIsArray(element)) {
-      rootExpression.arrays.push_back(element);
+      rootExpression.arrays.push_back(parse(element));
     } else {
       if (element.size() > 0) {
         rootExpression.values.push_back(element);

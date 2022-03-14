@@ -12,7 +12,7 @@ struct Expression {
     vector<Expression> expressions;
     vector<string> values;
     vector<string> links;
-    vector<string> arrays;
+    vector<Expression> arrays;
 };
 
 #endif STEP_PARSER_EXPRESSION_H

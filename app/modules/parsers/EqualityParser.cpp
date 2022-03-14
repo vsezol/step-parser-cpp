@@ -1,4 +1,5 @@
 #include "EqualityParser.h"
+#include <iostream>
 
 EqualityParser::EqualityParser(
         SimpleExpressionParser *simpleExpressionParser,
@@ -28,7 +29,6 @@ Expression EqualityParser::parse(string equality) {
   string equalityBody = parts[1];
 
   Expression expression;
-  expression.number = equalityNumber;
 
   if (isObjectExpressionChecker->check(equalityBody)) {
     expression = objectExpressionParser->parse(equalityBody);
@@ -36,6 +36,8 @@ Expression EqualityParser::parse(string equality) {
     simpleExpressionParser->parse(equalityBody);
     expression = simpleExpressionParser->parse(equalityBody);
   }
+
+  expression.number = equalityNumber;
 
   return expression;
 }

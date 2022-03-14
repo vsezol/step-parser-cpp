@@ -15,7 +15,7 @@ private:
     nlohmann::json convertToJSON(Expression expression);
 
     template<typename T>
-    nlohmann::json convertVectorToJson(vector<T> vec);
+    nlohmann::json convertPrimitiveVectorToJson(vector<T> vec);
 };
 
 

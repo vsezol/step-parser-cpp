@@ -40,7 +40,7 @@ void updateExecutionConfigByExecutionArguments(ExecutionConfig *executionConfig,
 int main(int argumentsCount, char **arguments) {
   ExecutionConfig *executionConfig = new ExecutionConfig({
           "C:\\vz\\pet\\step-parser\\files\\MBA_N.STP",
-          "C:\\vz\\pet\\step-parser\\files\\output\\output.json",
+          "C:\\vz\\pet\\step-parser\\files\\output.json",
           true,
           false,
   });
