@@ -57,3 +57,7 @@ string StringUtils::charToString(char chr) {
 
   return newString;
 }
+
+bool StringUtils::hasSubstring(string main, string sub) {
+  return main.find(sub) != string::npos;
+}

@@ -16,8 +16,6 @@ private:
     vector<string> sections;
     StepReaderConfig config;
 
-    StringUtils stringUtils;
-
     string extractSectionByKeyword(string keyword);
 
     int getSectionIndexByKeyword(string keyword);

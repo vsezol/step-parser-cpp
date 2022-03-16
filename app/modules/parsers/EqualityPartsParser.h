@@ -16,7 +16,6 @@ public:
 
 private:
     StepReaderConfig readerConfig;
-    StringUtils stringUtils;
 
     string extractNumber(string inputData);
     string extractExpression(string inputData);

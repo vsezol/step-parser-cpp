@@ -8,17 +8,19 @@ using namespace std;
 
 class StringUtils {
 public:
-    vector<string> split (string str, string delimiter);
+    static vector<string> split (string str, string delimiter);
 
-    string removeFirstElement(string str);
+    static string removeFirstElement(string str);
 
-    string removeLastElement(string str);
+    static string removeLastElement(string str);
 
-    string removeEnds(string str);
+    static string removeEnds(string str);
 
-    string trimByChar(string str, char chr);
+    static string trimByChar(string str, char chr);
 
-    string charToString(char chr);
+    static string charToString(char chr);
+
+    static bool hasSubstring(string main, string sub);
 };
 
 

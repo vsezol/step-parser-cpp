@@ -14,9 +14,6 @@ public:
     BaseExpressionParser();
 
     virtual Expression parse(string inputData) = 0;
-
-protected:
-    StringUtils stringUtils;
 };
 
 

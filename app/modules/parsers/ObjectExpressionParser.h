@@ -30,7 +30,6 @@ public:
     Expression parse(string inputData) override;
 
 private:
-    VectorUtils vectorUtils;
     AbstractArgumentsExtractor * argumentsExtractor;
     SimpleExpressionParser * simpleExpressionParser;
 };

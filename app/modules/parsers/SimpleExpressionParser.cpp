@@ -15,7 +15,7 @@ Expression SimpleExpressionParser::parse(string inputData) {
   rootExpression.name = expressionName;
   rootExpression.number = 0;
 
-  string expressionCall = stringUtils.removeEnds(inputData.substr(nameEndIndex));
+  string expressionCall = StringUtils::removeEnds(inputData.substr(nameEndIndex));
   vector<string> arguments = argumentsExtractor->extract(expressionCall);
 
   for (int i = 0; i < arguments.size(); i++) {
@@ -24,9 +24,30 @@ Expression SimpleExpressionParser::parse(string inputData) {
     if (checkIsExpression(element)) {
       rootExpression.expressions.push_back(parse(element));
     } else if (checkIsLink(element)) {
-      rootExpression.links.push_back(element);
+      rootExpression.children.push_back(element);
     } else if (checkIsArray(element)) {
-      rootExpression.arrays.push_back(parse(element));
+      // DANGER ARRAY TO FLAT
+      Expression arrayExpression = parse(element);
+
+      if (!arrayExpression.children.empty()) {
+        for (int i = 0; i < arrayExpression.children.size(); i++) {
+          rootExpression.children.push_back(arrayExpression.children[i]);
+        }
+      }
+
+      if (!arrayExpression.arrays.empty()) {
+        for (int i = 0; i < arrayExpression.expressions.size(); i++) {
+          rootExpression.expressions.push_back(arrayExpression.expressions[i]);
+        }
+      }
+
+      if (!arrayExpression.values.empty()) {
+        for (int i = 0; i < arrayExpression.values.size(); i++) {
+          rootExpression.values.push_back(arrayExpression.values[i]);
+        }
+      }
+      // old functionality
+      // rootExpression.arrays.push_back(parse(element));
     } else {
       if (element.size() > 0) {
         rootExpression.values.push_back(element);

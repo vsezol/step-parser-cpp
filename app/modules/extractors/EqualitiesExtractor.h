@@ -14,7 +14,6 @@ public:
 
 private:
     StepReaderConfig stepReaderConfig;
-    StringUtils stringUtils;
 };
 
 

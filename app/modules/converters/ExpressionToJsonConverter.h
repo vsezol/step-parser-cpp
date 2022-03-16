@@ -11,12 +11,11 @@ public:
 
     string convert(Expression expression);
 
-private:
     nlohmann::json convertToJSON(Expression expression);
-
+private:
     template<typename T>
     nlohmann::json convertPrimitiveVectorToJson(vector<T> vec);
 };
 
 
-#endif STEP_PARSER_EXPRESSIONTOJSONCONVERTER_H
+#endif //STEP_PARSER_EXPRESSIONTOJSONCONVERTER_H

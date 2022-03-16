@@ -1,6 +1,8 @@
 #include "ExpressionToJsonConverter.h"
 #include <iostream>
 
+using namespace std;
+
 string ExpressionToJsonConverter::convert(Expression expression) {
   return convertToJSON(expression).dump();
 }
@@ -11,7 +13,7 @@ nlohmann::json ExpressionToJsonConverter::convertToJSON(Expression expression) {
   j["number"] = expression.number;
 
   j["values"] = convertPrimitiveVectorToJson(expression.values);
-  j["links"] = convertPrimitiveVectorToJson(expression.links);
+  j["children"] = convertPrimitiveVectorToJson(expression.children);
 
   if (expression.arrays.size() > 0) {
     vector<nlohmann::json> arrays;

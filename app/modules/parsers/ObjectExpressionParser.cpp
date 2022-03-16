@@ -6,7 +6,6 @@ ObjectExpressionParser::ObjectExpressionParser(
         AbstractArgumentsExtractor * argumentsExtractor) :
         simpleExpressionParser(simpleExpressionParser),
         argumentsExtractor(argumentsExtractor) {
-  stringUtils = StringUtils();
 }
 
 Expression ObjectExpressionParser::parse(string inputData) {
@@ -14,7 +13,7 @@ Expression ObjectExpressionParser::parse(string inputData) {
   rootExpression.name = "";
 
   string stringExpression = inputData;
-  stringExpression = stringUtils.removeEnds(stringExpression);
+  stringExpression = StringUtils::removeEnds(stringExpression);
 
   vector<string> arguments = argumentsExtractor->extract(stringExpression);
 

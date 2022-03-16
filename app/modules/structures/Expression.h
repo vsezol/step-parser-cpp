@@ -3,15 +3,13 @@
 
 #include <vector>
 #include <string>
+#include "BaseExpression.h"
 
 using namespace std;
 
-struct Expression {
-    string name;
-    int number;
+struct Expression : public BaseExpression {
     vector<Expression> expressions;
-    vector<string> values;
-    vector<string> links;
+    vector<string> children;
     vector<Expression> arrays;
 };
 

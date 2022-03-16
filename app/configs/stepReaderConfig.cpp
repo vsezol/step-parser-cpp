@@ -10,5 +10,6 @@ const StepReaderConfig stepReaderConfig = {
         ',',
         '#',
         '=',
-        '\n'
+        '\n',
+        '$'
 };

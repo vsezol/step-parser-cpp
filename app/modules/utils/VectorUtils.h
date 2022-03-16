@@ -8,7 +8,7 @@ using namespace std;
 
 class VectorUtils {
 public:
-    vector<string> removeEmptyStrings(vector<string> arr);
+    static vector<string> removeEmptyStrings(vector<string> arr);
 };
 
 

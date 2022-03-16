@@ -1,15 +1,13 @@
 #include "SectionStepExtractor.h"
 
 SectionStepExtractor::SectionStepExtractor(StepReaderConfig config, string content): config(config) {
-  sections = stringUtils.split(content, config.END_SECTION_KEYWORD);
-
-  stringUtils = StringUtils();
+  sections = StringUtils::split(content, config.END_SECTION_KEYWORD);
 }
 
 string SectionStepExtractor::extractSectionContent(string keyword) {
   string section = extractSectionByKeyword(keyword);
 
-  return stringUtils.split(section, wrapKeyword(keyword))[1];
+  return StringUtils::split(section, wrapKeyword(keyword))[1];
 }
 
 string SectionStepExtractor::extractSectionByKeyword(string keyword) {
@@ -24,6 +22,8 @@ int SectionStepExtractor::getSectionIndexByKeyword(string keyword) {
       return i;
     }
   }
+
+  return -1;
 }
 
 string SectionStepExtractor::wrapKeyword(string keyword) {

@@ -1,4 +1,3 @@
-#include <iostream>
 #include "VectorUtils.h"
 
 using namespace std;

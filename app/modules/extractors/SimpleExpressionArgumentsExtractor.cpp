@@ -11,8 +11,8 @@ vector<string> SimpleExpressionArgumentsExtractor::extract(string content) {
   content = cutExpressionResult.content;
 
   vector<string> nonExpressionArguments =
-          stringUtils.split(content,
-                            stringUtils.charToString(
+          StringUtils::split(content,
+                            StringUtils::charToString(
                                     stepReaderConfig.ARGUMENTS_DIVIDER_SYMBOL
                             )
           );
@@ -28,7 +28,7 @@ vector<string> SimpleExpressionArgumentsExtractor::extract(string content) {
   }
 
   for (int i = 0; i < allArguments.size(); i++) {
-    allArguments[i] = stringUtils.trimByChar(allArguments[i], stepReaderConfig.EXPRESSION_OBJECT_DIVIDER_SYMBOL);
+    allArguments[i] = StringUtils::trimByChar(allArguments[i], stepReaderConfig.EXPRESSION_OBJECT_DIVIDER_SYMBOL);
   }
 
   return allArguments;
@@ -61,7 +61,7 @@ CutExpressionResult SimpleExpressionArgumentsExtractor::cutExpressions(string co
 
     newContent.erase(expScope[0], expScope[1] - expScope[0] + 1);
 
-    newContent = stringUtils.trimByChar(newContent, stepReaderConfig.ARGUMENTS_DIVIDER_SYMBOL);
+    newContent = StringUtils::trimByChar(newContent, stepReaderConfig.ARGUMENTS_DIVIDER_SYMBOL);
   }
 
   CutExpressionResult result = {expressions, expressionsScopes, newContent};

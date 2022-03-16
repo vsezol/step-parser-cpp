@@ -16,6 +16,7 @@ const struct StepReaderConfig {
     char LINK_BEGIN_SYMBOL;
     char EQUALITY_SYMBOL;
     char EXPRESSION_OBJECT_DIVIDER_SYMBOL;
+    char EMPTY_ARGUMENT_SYMBOL;
 };
 
 #endif STEP_PARSER_STEPREADERCONFIG_H

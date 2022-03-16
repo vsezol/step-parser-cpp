@@ -17,8 +17,6 @@ public:
 
 protected:
     StepReaderConfig stepReaderConfig;
-    StringUtils stringUtils;
-    VectorUtils vectorUtils;
 };
 
 
