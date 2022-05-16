@@ -26,19 +26,9 @@
 #include "modules/calculators/TreeExpressionHeightCalculator.h"
 #include "modules/loggers/ProgressLogger.h"
 
+#include "modules/functions/getUnorderedMapValues.cpp"
+
 using namespace std;
-
-template<typename T, typename U>
-vector<U> getUnorderedMapValues(unordered_map<T, U> inputMap) {
-  vector<U> mapValues;
-
-  for (typename unordered_map<T, U>::iterator tableItem = inputMap.begin();
-       tableItem != inputMap.end(); tableItem++) {
-    mapValues.push_back(tableItem->second);
-  }
-
-  return mapValues;
-}
 
 vector<string> getExecutionArguments(int argumentsCount, char **arguments) {
   vector<string> executionArguments;
@@ -49,23 +39,23 @@ vector<string> getExecutionArguments(int argumentsCount, char **arguments) {
 }
 
 int main(int argumentsCount, char **arguments) {
-  const int STAGES_COUNT = 6;
+  const int STAGES_COUNT = 7;
   string STAGES[STAGES_COUNT] = {
           "reading file",
           "extracting equalities",
           "parsing expressions",
           "building expressions tree",
           "filtration expressions tree",
-          "writing to file"
+          "writing to file",
+          "finishing"
   };
 
   ProgressLogger progressPrinter = ProgressLogger(STAGES, STAGES_COUNT);
 
   // configuration
   ExecutionConfig *executionConfig = new ExecutionConfig({
-                                                                 "C:\\vz\\pet\\step-parser\\files\\MBA_N.STP",
-                                                                 "C:\\vz\\pet\\step-parser\\files\\output.json",
-                                                                 "flat",
+                                                                 "",
+                                                                 "",
                                                                  false,
                                                                  false,
                                                                  ""
@@ -158,7 +148,9 @@ int main(int argumentsCount, char **arguments) {
           rootTreeExpression);
   FileWorker(executionConfig->outputPath).write(serializedRootTreeExpression);
 
-  // cleaning
+  // finishing
+  progressPrinter.toNextStage();
+  progressPrinter.logCurrentStage();
   delete executionConfig;
 
   return 0;

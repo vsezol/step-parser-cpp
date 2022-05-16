@@ -4,7 +4,6 @@
 struct ExecutionConfig {
     string inputPath;
     string outputPath;
-    string mode; // flat, tree
     bool isShowEmpty;
     bool isShowAllNumbers;
     string filterBy;
@@ -22,8 +21,6 @@ struct ExecutionConfig {
           inputPath = nextArg;
         } else if (arg == "--output" || arg == "-O") {
           outputPath = nextArg;
-        } else if (arg == "--mode" || arg == "-M") {
-          mode = nextArg;
         } else if (arg == "--show-empty" || arg == "-SE") {
           isShowEmpty = true;
         } else if (arg == "--show-all-numbers" || arg == "-SAN") {
